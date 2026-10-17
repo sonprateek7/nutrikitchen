@@ -1,0 +1,493 @@
+{
+  "documentType": "project-handoff-summary",
+  "schemaVersion": "1.0.0",
+  "project": {
+    "name": "NutriKitchen",
+    "nameStatus": "working name; may change",
+    "summary": "A personal, AI-enabled nutrition, meal-planning, and kitchen-inventory application that connects food consumption, nutritional goals, available ingredients, and grocery activity.",
+    "vision": "Help a user understand what they eat, choose a suitable next meal, and manage ingredients at home, while clearly communicating estimates and uncertainty.",
+    "audience": "Initially a single user's personal project and learning vehicle; future multi-user product scope is not yet defined."
+  },
+  "sourceAndScope": {
+    "sourceConversationTitle": "Design nutrition tracker",
+    "sourceConversationId": "6ad2a948-00d8-83ee-bc2e-2bbdabb824f5",
+    "representation": "Structured summary and project handoff derived from the conversation; not a verbatim transcript.",
+    "scopeNote": "This brief consolidates the product idea, learning goals, engineering expectations, proposed roadmap, and next step. Decisions marked proposed remain open for requirements discovery."
+  },
+  "userLearningProfile": {
+    "experience": "Approximately 3 years of QA experience and 1 year in development at the time of the conversation.",
+    "knownFoundation": "Java and Spring Boot experience was mentioned; depth in individual topics should be checked as needed.",
+    "learningGoals": [
+      "Build backend engineering depth through a real project",
+      "Learn new technologies incrementally and in context",
+      "Understand why engineering practices and tools are used",
+      "Develop production-level software habits"
+    ],
+    "mentoringApproach": [
+      "Explain unfamiliar concepts when they become relevant",
+      "Connect concepts to the project and discuss trade-offs",
+      "Let the learner implement and reason through solutions",
+      "Review and debug collaboratively instead of always replacing work with finished code",
+      "Avoid reteaching fundamentals already understood; check understanding as work proceeds"
+    ]
+  },
+  "productVisionAndCapabilities": [
+    {
+      "id": "nutrition_tracking",
+      "name": "Nutrition tracking",
+      "description": "Record meals and estimate calories, protein, carbohydrates, fats, and other nutrients against user-defined goals."
+    },
+    {
+      "id": "meal_management",
+      "name": "Meal management",
+      "description": "Record home-cooked meals, snacks, and restaurant orders; distinguish ordered food from food confirmed as consumed."
+    },
+    {
+      "id": "pantry_management",
+      "name": "Pantry and ingredient inventory",
+      "description": "Track purchased, confirmed, estimated, and remaining quantities; account for units, recipe use, corrections, low-stock thresholds, and expiry where available."
+    },
+    {
+      "id": "meal_planning",
+      "name": "Next-meal recommendations",
+      "description": "Recommend suitable meals using remaining nutrition goals, dietary restrictions, preferences, preparation time, and pantry availability; explain recommendation reasons."
+    },
+    {
+      "id": "grocery_import",
+      "name": "Grocery order and receipt import",
+      "description": "Reduce manual entry by importing grocery details through authorized integrations where available, with invoice/receipt import and manual correction as practical initial paths."
+    },
+    {
+      "id": "automation",
+      "name": "Alerts and automation",
+      "description": "Generate low-stock or expiry warnings and, later, shopping lists and personalized suggestions."
+    }
+  ],
+  "exampleEndToEndFlow": [
+    "A grocery purchase is imported or confirmed and creates pantry stock.",
+    "The user logs a home-cooked meal or restaurant meal.",
+    "Nutrition is calculated or estimated and added to the user's daily totals.",
+    "For recipe-based cooking, ingredient consumption is applied to inventory with compatible units.",
+    "Remaining nutrition goals and available ingredients inform the next-meal recommendation.",
+    "Inventory thresholds or consumption trends can trigger low-stock alerts.",
+    "The user can correct inventory and meal details when the system's estimates are wrong."
+  ],
+  "keyProductConstraintsAndOpenQuestions": [
+    "Do not assume Blinkit, Zepto, Instamart, Swiggy, or Zomato expose consumer order-history APIs. Investigate authorized access before committing to direct integrations.",
+    "Prefer invoice/receipt upload plus user confirmation and manual entry as an initial import route if provider access is unavailable.",
+    "An order is not proof the food was consumed; preserve distinct order and consumption records/states.",
+    "Nutrition values for restaurant meals, brands, and approximate portions may be estimates; show provenance and uncertainty rather than implying false precision.",
+    "Inventory is inherently uncertain when meals or purchases are not logged; distinguish confirmed, estimated, and unknown stock and allow correction.",
+    "Model units and raw-versus-cooked ingredient conversions explicitly; do not subtract incompatible quantities.",
+    "Personal nutrition goals and recommendation rules need requirements discovery and should not be framed as medical advice."
+  ],
+  "engineeringExpectations": {
+    "developmentLifecycle": "Use an iterative, practical Agile-inspired SDLC for every feature: requirement analysis, specification and acceptance criteria, design, implementation, testing, code review, CI/CD, deployment, monitoring, and maintenance.",
+    "principles": [
+      "Understand the requirement, business rules, edge cases, and failure cases before implementation",
+      "Build maintainable software with clear responsibilities and separation of concerns",
+      "Apply SOLID and design patterns when they address a real design need; avoid ceremony and needless abstractions",
+      "Introduce complexity gradually and justify important technology and architecture choices",
+      "Treat tests as part of development and use the learner's QA background as a strength",
+      "Keep lightweight documentation current with the product",
+      "Make security, reliability, observability, and production readiness part of delivery",
+      "Ensure the learner understands the code and trade-offs"
+    ],
+    "featureWorkflow": [
+      "Create or refine an issue describing the problem",
+      "Define requirements, edge cases, and acceptance criteria",
+      "Design the relevant domain model, API, data changes, and component responsibilities",
+      "Implement on a focused Git branch with meaningful commits",
+      "Add or update appropriate automated tests",
+      "Run build, tests, and relevant quality checks",
+      "Review the diff for correctness, security, maintainability, performance, and unnecessary complexity",
+      "Merge through the chosen workflow",
+      "Update README, API docs, diagrams, ADRs, or runbooks as appropriate",
+      "Deploy, observe, maintain, and learn from results as relevant to project maturity"
+    ],
+    "testingStrategy": [
+      {
+        "level": "Unit",
+        "purpose": "Fast checks of focused business logic, such as nutrition calculations and recommendation scoring.",
+        "candidateTools": [
+          "JUnit 5",
+          "Mockito"
+        ]
+      },
+      {
+        "level": "Integration",
+        "purpose": "Verify persistence and components together, including PostgreSQL behavior.",
+        "candidateTools": [
+          "Spring Boot Test",
+          "Testcontainers"
+        ]
+      },
+      {
+        "level": "API",
+        "purpose": "Verify HTTP contracts, validation, authorization, and error responses."
+      },
+      {
+        "level": "Contract",
+        "purpose": "Check compatibility with external provider boundaries when integrations exist."
+      },
+      {
+        "level": "End-to-end",
+        "purpose": "Verify a small number of complete user workflows."
+      },
+      {
+        "level": "Performance and security",
+        "purpose": "Assess important latency/load behavior and protection of user data as product risk grows."
+      }
+    ],
+    "reviewCriteria": [
+      "Correctness and edge cases",
+      "SOLID and separation of concerns",
+      "Naming and readability",
+      "Exception handling and transactions",
+      "Database access and query efficiency",
+      "Security and user-data protection",
+      "Test quality and meaningful coverage",
+      "Avoiding unnecessary complexity"
+    ],
+    "codeReviewDistinction": "Separate genuine defects from maintainability concerns and stylistic preferences.",
+    "documentationArtifacts": [
+      {
+        "file": "README.md",
+        "purpose": "Overview, setup, and usage"
+      },
+      {
+        "file": "requirements/ or equivalent",
+        "purpose": "Functional and non-functional requirements and acceptance criteria"
+      },
+      {
+        "file": "docs/architecture/",
+        "purpose": "Architecture and domain/database diagrams"
+      },
+      {
+        "file": "OpenAPI specification",
+        "purpose": "API contracts"
+      },
+      {
+        "file": "docs/adr/",
+        "purpose": "Architecture Decision Records documenting context, alternatives, decision, and consequences"
+      },
+      {
+        "file": "docs/testing/",
+        "purpose": "Test strategy and quality approach"
+      },
+      {
+        "file": "docs/deployment/",
+        "purpose": "Deployment and operations guidance"
+      },
+      {
+        "file": "docs/troubleshooting/",
+        "purpose": "Common issues and resolutions"
+      }
+    ],
+    "ciCd": "Use GitHub Actions incrementally for compile/build, unit and integration tests, static analysis, and artifact creation; introduce automated deployment later.",
+    "productionEngineeringTopics": [
+      "Authentication and authorization",
+      "Secrets management and secure input handling",
+      "Dependency vulnerability scanning",
+      "Logging, metrics, tracing, and health checks",
+      "Timeouts, retries, idempotency, graceful failure, and rate limiting",
+      "Database backup and recovery",
+      "Reliability and operational maintenance"
+    ]
+  },
+  "proposedArchitectureAndStack": {
+    "architecture": "Start as a modular monolith with clear domain/module boundaries. Evolve only when requirements or operational evidence justify it.",
+    "initialModules": [
+      "User profile and goals",
+      "Food and nutrition data",
+      "Meal management",
+      "Recipes",
+      "Inventory/pantry",
+      "External integrations",
+      "Recommendations"
+    ],
+    "backend": {
+      "language": "Java 21 or a currently supported LTS version; confirm at project setup",
+      "framework": "Spring Boot",
+      "web": "Spring Web / REST",
+      "persistence": "Spring Data JPA",
+      "database": "PostgreSQL",
+      "validation": "Jakarta Bean Validation",
+      "build": "Maven",
+      "migrations": "Flyway, introduced with schema evolution",
+      "tests": [
+        "JUnit 5",
+        "Mockito",
+        "Spring Boot Test",
+        "Testcontainers when integration testing against PostgreSQL"
+      ]
+    },
+    "frontend": {
+      "recommended": "React with TypeScript",
+      "supportingTopics": [
+        "HTML/CSS",
+        "React Router",
+        "TanStack Query or a comparable data-fetching library",
+        "Charting library if nutrition summaries need charts"
+      ],
+      "alternative": "Flutter if mobile-first native applications become the priority; avoid learning React, TypeScript, Flutter, and Java simultaneously at the outset."
+    },
+    "integrations": {
+      "initialApproach": "Normalize provider data into internal models. Start with reliable manual entry or receipt/invoice import where official consumer APIs are unavailable.",
+      "laterOptions": [
+        "Official nutrition/food data provider",
+        "Authorized grocery or food-delivery integrations",
+        "Email receipt parsing only after privacy, access, and feasibility review",
+        "Resilient HTTP clients such as Spring WebClient and Resilience4j when needed"
+      ]
+    },
+    "conditionalTechnologies": [
+      {
+        "technology": "Docker",
+        "introduceWhen": "Reproducible local environments or deployment packaging are needed."
+      },
+      {
+        "technology": "Redis",
+        "introduceWhen": "A concrete caching, rate limiting, or coordination need appears."
+      },
+      {
+        "technology": "Kafka",
+        "introduceWhen": "There are justified asynchronous event-processing needs and simpler mechanisms are insufficient."
+      },
+      {
+        "technology": "Kubernetes",
+        "introduceWhen": "Deployment scale/operations justify orchestration; not an initial requirement."
+      },
+      {
+        "technology": "LLM APIs and structured outputs",
+        "introduceWhen": "Natural-language meal entry, receipt interpretation, or explanations add value after deterministic validation paths exist."
+      },
+      {
+        "technology": "RAG",
+        "introduceWhen": "The app needs grounded answers over a maintained knowledge collection; not merely for ordinary database lookup."
+      },
+      {
+        "technology": "OpenTelemetry, Prometheus, Grafana",
+        "introduceWhen": "Operational observability needs grow beyond logs and health checks."
+      }
+    ],
+    "architectureNotes": [
+      "Keep business logic independent from provider-specific response formats behind appropriate boundaries.",
+      "Validate AI-produced structures and use deterministic backend logic for nutrition calculations and persistence.",
+      "Enforce authorization and permissions server-side; never give an LLM unrestricted database access.",
+      "Use transactions and concurrency controls for meal logging and inventory changes where atomicity is required.",
+      "Use idempotency to protect against duplicate imports or repeated operations."
+    ]
+  },
+  "technologyRoadmap": [
+    {
+      "phase": 1,
+      "name": "Build the foundation",
+      "goal": "Deliver a working nutrition-tracking backend with a database.",
+      "technologies": [
+        "Java 21 or supported LTS",
+        "Spring Boot",
+        "Spring Web",
+        "Spring Data JPA",
+        "PostgreSQL",
+        "Maven",
+        "Bean Validation",
+        "JUnit 5",
+        "Mockito",
+        "Git and GitHub"
+      ],
+      "learning": [
+        "Modern Java and Spring fundamentals",
+        "REST API design",
+        "Relational modelling and SQL",
+        "Requirements and acceptance criteria",
+        "SOLID fundamentals",
+        "Unit testing"
+      ],
+      "milestone": "A user can record a meal and food items, calculate nutrition, and see daily totals."
+    },
+    {
+      "phase": 2,
+      "name": "Recipes and pantry",
+      "goal": "Track recipes, ingredients, and reliable inventory changes.",
+      "technologies": [
+        "Advanced SQL and constraints",
+        "Spring transactions",
+        "Optimistic locking or other justified concurrency control",
+        "Flyway",
+        "Testcontainers",
+        "Docker when useful"
+      ],
+      "learning": [
+        "Unit compatibility and raw/cooked conversions",
+        "Atomic updates",
+        "Concurrent inventory operations",
+        "Schema evolution",
+        "Integration testing"
+      ],
+      "milestone": "Create recipes, log meals, update pantry quantities, and handle concurrent inventory changes reliably."
+    },
+    {
+      "phase": 3,
+      "name": "Usable frontend",
+      "goal": "Use the application through a browser.",
+      "technologies": [
+        "HTML/CSS",
+        "TypeScript",
+        "React",
+        "React Router",
+        "TanStack Query or equivalent",
+        "Frontend testing tools selected during implementation"
+      ],
+      "learning": [
+        "API contracts",
+        "Loading/error states",
+        "Client validation",
+        "CORS",
+        "Responsive UI",
+        "Frontend-backend communication"
+      ],
+      "milestone": "Use dashboard, meal log, recipe manager, and pantry screens against real APIs."
+    },
+    {
+      "phase": 4,
+      "name": "Authentication and external integrations",
+      "goal": "Protect accounts and safely integrate external food/order data.",
+      "technologies": [
+        "Spring Security",
+        "OAuth 2.0 / OpenID Connect concepts",
+        "External REST APIs",
+        "WebClient",
+        "Resilience4j",
+        "Spring Boot Actuator"
+      ],
+      "learning": [
+        "Authentication and authorization",
+        "Provider data normalization",
+        "Timeouts/retries/circuit breaking",
+        "Idempotency",
+        "Integration contracts and privacy"
+      ],
+      "milestone": "Import food data and grocery information through at least one feasible mechanism; retain manual correction and distinguish orders from consumption."
+    },
+    {
+      "phase": 5,
+      "name": "Recommendation engine",
+      "goal": "Recommend meals using remaining nutrition needs, preferences, and actual inventory.",
+      "technologies": [
+        "Java filtering/ranking algorithms",
+        "PostgreSQL query optimization",
+        "Scoring and evaluation methods"
+      ],
+      "learning": [
+        "Deterministic rule-based recommendations",
+        "Constraint handling",
+        "Trade-offs and recommendation evaluation",
+        "Explicit preference modelling"
+      ],
+      "milestone": "Rank and explain suitable recipes based on nutritional fit and ingredients available."
+    },
+    {
+      "phase": 6,
+      "name": "AI and computer vision",
+      "goal": "Reduce tedious data entry and support natural interaction after trustworthy core logic exists.",
+      "technologies": [
+        "LLM APIs",
+        "Structured outputs and tool calling",
+        "Potential RAG",
+        "Computer vision/image recognition when useful"
+      ],
+      "learning": [
+        "Schema validation",
+        "AI evaluation",
+        "Privacy",
+        "Grounding and safe tool boundaries",
+        "Human confirmation for uncertain extraction"
+      ],
+      "milestone": "AI can parse descriptions or receipts into candidate structured data, with user confirmation and backend validation before saving."
+    },
+    {
+      "phase": 7,
+      "name": "Asynchronous processing",
+      "goal": "Move suitable slow or event-based work out of synchronous request paths.",
+      "technologies": [
+        "Redis and/or Kafka only when justified",
+        "Transactional outbox",
+        "Event-driven design"
+      ],
+      "learning": [
+        "Message delivery and retries",
+        "Duplicate processing",
+        "Distributed-system trade-offs",
+        "Failure handling"
+      ],
+      "milestone": "Process a justified background workflow reliably and observe its status."
+    },
+    {
+      "phase": 8,
+      "name": "Analytics and prediction",
+      "goal": "Estimate consumption and improve useful shopping/recommendation insights.",
+      "technologies": [
+        "Data analysis",
+        "Forecasting",
+        "Optimization"
+      ],
+      "learning": [
+        "Measure data quality",
+        "Evaluate predictions",
+        "Use uncertainty-aware forecasts"
+      ],
+      "milestone": "Provide useful, explainable consumption or low-stock estimates based on observed history."
+    },
+    {
+      "phase": 9,
+      "name": "Production deployment",
+      "goal": "Deploy and operate the application with production-minded safeguards.",
+      "technologies": [
+        "GitHub Actions",
+        "Cloud platform selected when requirements are known",
+        "Logging/metrics/tracing tools introduced as needed",
+        "Security and dependency scanning"
+      ],
+      "learning": [
+        "CI/CD",
+        "Configuration and secret handling",
+        "Monitoring and alerting",
+        "Backups and recovery",
+        "Reliability and security hardening"
+      ],
+      "milestone": "Deploy a documented release with automated checks, health visibility, and a basic recovery plan."
+    }
+  ],
+  "milestones": [
+    "Requirements and domain model agreed before Java implementation",
+    "Nutrition tracking backend and PostgreSQL schema working",
+    "Recipe and pantry workflows with safe transactional behavior",
+    "Browser frontend for daily use",
+    "At least one practical, authorized external data-import path",
+    "Explainable rules-based meal recommendations",
+    "Validated AI-assisted entry only where it improves usability",
+    "Justified asynchronous processing and analytics",
+    "Documented deployment with CI/CD and operational visibility"
+  ],
+  "firstNextStep": {
+    "name": "Requirements engineering and domain modelling",
+    "instruction": "Begin Phase 1, Step 1. Define what User, FoodItem, Meal, and MealItem mean in this system; write functional and non-functional requirements, business rules, edge cases, and acceptance criteria; sketch the initial domain/database model before writing Java code.",
+    "initialQuestions": [
+      "Is the first release single-user or multi-user?",
+      "Which meal-entry paths belong in the MVP?",
+      "Which nutrients and units are in MVP scope?",
+      "How are nutrition targets entered and represented?",
+      "What level of ingredient and pantry tracking is required for the first release?",
+      "How should estimates, unknown values, and user corrections be represented?"
+    ],
+    "firstDeliverables": [
+      "MVP scope statement",
+      "Glossary/domain definitions",
+      "Functional and non-functional requirements",
+      "Acceptance criteria and key failure cases",
+      "Initial domain model/ER sketch",
+      "ADR for initial architecture and stack choices"
+    ]
+  }
+}
