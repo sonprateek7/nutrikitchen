@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f7f2">
+    <meta name="description" content="A calm, practical space to keep track of meals, nutrition, and your kitchen.">
+    <title>NutriKitchen — Eat well, feel good</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%232d543f'/%3E%3Cpath d='M32 48C12 42 13 19 31 16c1 10 5 15 13 16-2 8-7 13-12 16Z' fill='%23c9df8b'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./config.js"></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="#dashboard" aria-label="NutriKitchen home">
+          <span class="brand-mark" aria-hidden="true">n</span>
+          <span><strong>nutri<span>kitchen</span></strong><small>YOUR EVERYDAY WELLNESS</small></span>
+        </a>
+        <div class="nav-label">WORKSPACE</div>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#dashboard" data-page="dashboard"><span class="nav-icon">⌂</span>Overview</a>
+          <a href="#journal" data-page="journal"><span class="nav-icon">▤</span>Meal journal</a>
+          <a href="#foods" data-page="foods"><span class="nav-icon">◉</span>My foods</a>
+          <a href="#pantry" data-page="pantry"><span class="nav-icon">▦</span>My pantry</a>
+          <a href="#recipes" data-page="recipes"><span class="nav-icon">♨</span>Recipes</a>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-note">
+            <span class="note-leaf">✳</span>
+            <strong>Small steps add up.</strong>
+            <p>A little more awareness is a good place to start.</p>
+          </div>
+          <div class="sidebar-data">
+            <button type="button" data-action="import-data">Import a backup</button>
+            <button type="button" data-action="export-data">Export my data</button>
+          </div>
+          <button class="profile-button" id="goals-button">
+            <span class="avatar">🌱</span>
+            <span><strong>My daily goals</strong><small>Make them your own</small></span>
+            <span class="profile-arrow">›</span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <button class="mobile-menu" id="menu-button" aria-label="Open navigation" aria-expanded="false">☰</button>
+          <div class="breadcrumb"><span>My kitchen</span><span class="crumb-divider">/</span><strong id="page-title">Overview</strong></div>
+          <div class="topbar-actions">
+            <span class="today-label" id="today-label"></span>
+            <button class="icon-button" id="import-button" title="Import a backup" aria-label="Import a backup">⇧</button>
+            <button class="icon-button" id="export-button" title="Export your data" aria-label="Export your data">⇩</button>
+            <button class="button button-primary button-small" data-action="log-meal"><span>＋</span> Log a meal</button>
+          </div>
+        </header>
+        <input id="import-file" class="hidden" type="file" accept="application/json,.json">
+        <div id="app" class="page-content" tabindex="-1"></div>
+        <footer class="app-footer">
+          <span>Made for real life, one meal at a time.</span>
+          <span>Nutrition estimates are for general information, not medical advice.</span>
+        </footer>
+      </main>
+    </div>
+    <div id="modal-root"></div>
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+  </body>
+</html>

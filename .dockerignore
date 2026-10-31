@@ -1,0 +1,8 @@
+.git
+.gradle
+.idea
+.DS_Store
+build
+frontend/node_modules
+nutrikitchen-data.mv.db
+nutrikitchen-data.trace.db
