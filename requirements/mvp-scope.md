@@ -2,22 +2,26 @@
 
 ## 1. MVP scope statement
 
-The first release is a single-user nutrition tracker that lets a user:
+The first browser release is a single-user nutrition and kitchen tracker that lets a user:
 
 - create and maintain a personal list of food items,
 - log meals with one or more food items,
 - calculate macro totals for a meal and across the day,
 - compare totals against daily nutrition targets,
-- review a simple record of what was eaten and when.
+- review a simple record of what was eaten and when,
+- keep an estimated pantry quantity for known foods,
+- save recipes from known foods and review ingredient-aware meal ideas.
 
 Out of scope for the MVP:
 
 - multi-user accounts,
 - authentication and authorization,
-- grocery import integrations,
-- pantry inventory corrections and recipe consumption logic,
-- recommendation engine,
+- automatic deduction of pantry stock from meals or recipes,
+- grocery order or receipt integrations,
+- personalized or medical recommendations,
 - AI-assisted data entry.
+
+The browser release is a static application. Data is saved in the current browser's local storage and can be exported or restored as a JSON backup; it is not synchronized to the Java application or across devices. The Spring Boot backend is still a separate foundation and needs a hosted API and database before shared persistence is available.
 
 ## 2. Glossary and domain definitions
 
@@ -104,6 +108,16 @@ Then the application shows progress toward or remaining values to meet the goal.
 Given invalid data such as a negative quantity or missing required values,
 When the user submits the meal or food item,
 Then the system rejects the request with a clear validation error.
+
+### AC6: Pantry and recipes
+Given the user has foods in their personal library,
+When they add pantry quantities or save a recipe using those foods,
+Then the browser app shows the estimated stock, recipe nutrition, and whether recipe ingredients appear to be available.
+
+### AC7: Local data recovery
+Given the user has browser data to keep,
+When they export a backup and later import it,
+Then the browser app restores the goals, foods, meals, pantry, and recipes from that backup.
 
 ## 8. Open questions to confirm
 
