@@ -828,6 +828,7 @@
   document.addEventListener("click", (event) => {
     const target = event.target.closest("[data-action], [data-navigate]");
     if (!target) return;
+    if (target.dataset.action === "backdrop-close" && event.target !== target) return;
     if (target.dataset.navigate) {
       currentPage = target.dataset.navigate;
       location.hash = currentPage;
