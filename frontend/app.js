@@ -48,6 +48,9 @@
   let categoryFilter = "All categories";
   const app = document.querySelector("#app");
   const modalRoot = document.querySelector("#modal-root");
+  modalRoot.addEventListener("click", (event) => {
+    if (event.target.classList.contains("modal-backdrop")) closeModal();
+  });
   const pageTitles = { dashboard: "Overview", journal: "Meal journal", foods: "My foods", pantry: "My pantry", recipes: "Recipes" };
   const pageEmojis = { Breakfast: "☀️", Lunch: "🥗", Dinner: "🍲", Snack: "🍎", Other: "🍽️" };
   const categoryEmojis = { Grains: "🌾", Dairy: "🥛", Fruit: "🫐", Protein: "🥚", Produce: "🥬", Other: "🍴" };
@@ -407,7 +410,7 @@
   }
 
   function modal(title, description, body, submitText, formName) {
-    modalRoot.innerHTML = `<div class="modal-backdrop" data-action="backdrop-close"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><header class="modal-header"><div><h2 id="modal-title">${title}</h2><p>${description}</p></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Close dialog">×</button></header><form id="${formName}"><div class="modal-body">${body}</div><footer class="modal-actions"><button class="button button-secondary" type="button" data-action="close-modal">Cancel</button><button class="button button-primary" type="submit">${submitText}</button></footer></form></section></div>`;
+    modalRoot.innerHTML = `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><header class="modal-header"><div><h2 id="modal-title">${title}</h2><p>${description}</p></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Close dialog">×</button></header><form id="${formName}"><div class="modal-body">${body}</div><footer class="modal-actions"><button class="button button-secondary" type="button" data-action="close-modal">Cancel</button><button class="button button-primary" type="submit">${submitText}</button></footer></form></section></div>`;
     modalRoot.querySelector("input, select, textarea")?.focus();
   }
 
@@ -822,13 +825,11 @@
     if (action === "adjust-stock") adjustStock(target.dataset.id, target.dataset.direction);
     if (action === "delete-stock") deleteStock(target.dataset.id);
     if (action === "log-recipe") logRecipe(target.dataset.id);
-    if (action === "backdrop-close" && target === modalRoot.firstElementChild) closeModal();
   }
 
   document.addEventListener("click", (event) => {
     const target = event.target.closest("[data-action], [data-navigate]");
     if (!target) return;
-    if (target.dataset.action === "backdrop-close" && event.target !== target) return;
     if (target.dataset.navigate) {
       currentPage = target.dataset.navigate;
       location.hash = currentPage;
